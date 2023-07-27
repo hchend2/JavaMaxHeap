@@ -3,18 +3,18 @@ import java.util.Arrays;
 
 public class PowerOf2MaxHeap {
 
-    private int size = 0;
+    private int size;
     private int[] MaxHeap; // array
     private int capacity;
 
     // constructor ...
-    public PowerOf2MaxHeap(int size) {
-        this.capacity = size;
+    public PowerOf2MaxHeap(int capacity) {
+        this.capacity = capacity;
         this.size = 0;
         this.MaxHeap = new int[capacity];
     }
 
-    //method to get the parent node position ...
+    // return the parent node position ...
     private int getParentPosition(int i) {
         return (i/2);
     }
@@ -35,7 +35,7 @@ public class PowerOf2MaxHeap {
         int tmp = MaxHeap[index];
         while (index > 0 && tmp > MaxHeap[getParentPosition(index)]) {
             MaxHeap[index] = MaxHeap[getParentPosition(index)];
-            index = getLeftChildPosition(index);
+            index = getParentPosition(index);
         }
         MaxHeap[index] = index;
     }
