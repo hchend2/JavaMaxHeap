@@ -29,6 +29,25 @@ public class MaxHeapTests {
         assertEquals(0, max_heap.getSizeOfMaxHeap());
     }
     @Test
+    void TestIsEmpty() {
+        assertTrue(max_heap.isEmpty());
+    }
+    @Test
+    void testIsFull() {
+        assertFalse(max_heap.isFull());
+    }
+    @Test
+    void testSwap() {
+
+        max_heap.insertNodeItem(10);
+        max_heap.insertNodeItem(4);
+        max_heap.swapPosition(0,1);
+        assertEquals(2, max_heap.getSizeOfMaxHeap());
+
+//        assertEquals(4, max_heap[0]);
+//        assertEquals(10, max_heap[1]);
+    }
+    @Test
     void testInsertNodeItem() {
 //      insert few items into the heap and check if the size increases ...
         max_heap.insertNodeItem(10);

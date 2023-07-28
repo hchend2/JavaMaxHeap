@@ -17,40 +17,29 @@ public class PowerOf2MaxHeap {
         this.capacity = capacity;
         MaxHeap = new int[this.capacity];
     }
-
     // get size of the heap array ...
     public int getSizeOfMaxHeap() {
         return size;
     }
-
     // return true if heap is empty ...
     public boolean isEmpty() {
         return size == 0;
     }
-
     // return true if heap is full ...
     public boolean isFull() {
         return size == MaxHeap.length;
     }
-
     // return the parent node position ...
     private int getParentPosition(int i) {
-        return (i - 1)/2;
+        return (i - 1)/numberOfChildren;
     }
-
-    // return right child node position ...
-    private int getRightChildPosition(int i) {
-        return (2*i + 2);
+    // get the nth child of node a position i ...
+    private int get_nthChildPosition(int i, int n) {
+        return numberOfChildren * i + n;
     }
-
-    // return left child node position ...
-    private  int getLeftChildPosition(int i) {
-        return (2*i + 1);
-    }
-
     // re-arrange the heap going upward from children to parent ...
     // to make sure that the heap properties are respected ...
-    public void reArrangeMaxHeapUpward(int index) {
+    private void reArrangeMaxHeapUpward(int index) {
         int tmp = MaxHeap[index];
         while (index > 0 && tmp < MaxHeap[getParentPosition(index)]) {
             MaxHeap[index] = MaxHeap[getParentPosition(index)];
@@ -59,23 +48,44 @@ public class PowerOf2MaxHeap {
         MaxHeap[index] = tmp;
     }
 
+    private int get_smallestChild(int index) {
+        int i = 2;
+        int smallestChild = get_nthChildPosition(index, 1);
+        int pos = get_nthChildPosition(index, i);
+        while ((i <= numberOfChildren) && (pos < size)) {
+            if (MaxHeap[pos] < MaxHeap[smallestChild]) {
+                smallestChild = pos;
+            }
+            i++;
+            pos = get_nthChildPosition(index, i);
+        }
+        return smallestChild;
+    }
+    // re-arrange the heap going downward from parent to children ...
+    private void reArrangeMaxHeapDownward(int index) {
+        int tmp = MaxHeap[index];
+        while (get_nthChildPosition(index, 1) < getSizeOfMaxHeap()) {
+            if (MaxHeap[get_smallestChild(index)] < tmp) {
+                MaxHeap[index] = MaxHeap[get_smallestChild(index)];
+            } else {
+                break;
+            }
+            index = get_smallestChild(index);
+        }
+        MaxHeap[index] = tmp;
+    }
     // swap 2 element ...
-    private void swapPosition(int i, int j) {
+    public void swapPosition(int i, int j) {
         int tmp;
         tmp = MaxHeap[i];
         MaxHeap[i] = MaxHeap[j];
         MaxHeap[j] = tmp;
     }
-
     // insert a new node item into the heap and re-arrange the heap ...
     public void insertNodeItem(int item) {
         MaxHeap[size] = item;
         int currIndex = size;
-        while (MaxHeap[currIndex] > MaxHeap[getParentPosition(currIndex)]) {
-            swapPosition(currIndex, getParentPosition(currIndex)); // swap elements ...
-            currIndex = getParentPosition(currIndex); // update current position ...
-        }
+        reArrangeMaxHeapUpward(currIndex);
         size++;
     }
-
 }
