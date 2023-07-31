@@ -1,14 +1,13 @@
 package org.example;
 import java.util.Arrays;
 import java.lang.Math;
-
 import static java.lang.Math.pow;
 
 public class PowerOf2MaxHeap {
     private int size = 0;
 //    private  int d;
     private int numberOfChildren;
-    private int[] MaxHeap; // array
+    public int[] MaxHeap; // array
     private int capacity;
 
     // constructor ...
@@ -16,6 +15,7 @@ public class PowerOf2MaxHeap {
         this.numberOfChildren = (int) pow(2, n);
         this.capacity = capacity;
         MaxHeap = new int[this.capacity];
+        Arrays.fill(MaxHeap, -1);
     }
     // get size of the heap array ...
     public int getSizeOfMaxHeap() {
@@ -27,8 +27,9 @@ public class PowerOf2MaxHeap {
     }
     // return true if heap is full ...
     public boolean isFull() {
-        return size == MaxHeap.length;
+        return size == capacity;
     }
+
     // return the parent node position ...
     private int getParentPosition(int i) {
         return (i - 1)/numberOfChildren;
@@ -52,7 +53,7 @@ public class PowerOf2MaxHeap {
         int i = 2;
         int smallestChild = get_nthChildPosition(index, 1);
         int pos = get_nthChildPosition(index, i);
-        while ((i <= numberOfChildren) && (pos < size)) {
+        while ((i <= numberOfChildren) && (pos < getSizeOfMaxHeap())) {
             if (MaxHeap[pos] < MaxHeap[smallestChild]) {
                 smallestChild = pos;
             }
@@ -83,9 +84,28 @@ public class PowerOf2MaxHeap {
     }
     // insert a new node item into the heap and re-arrange the heap ...
     public void insertNodeItem(int item) {
-        MaxHeap[size] = item;
-        int currIndex = size;
+        MaxHeap[getSizeOfMaxHeap()] = item;
+        int currIndex = getSizeOfMaxHeap();
         reArrangeMaxHeapUpward(currIndex);
-        size++;
+        size = getSizeOfMaxHeap() + 1;
+    }
+    // delete node at a specific index and re-arrange the maxheap ...
+    public int deleteNodeItem(int index) {
+        int i = MaxHeap[index];
+        MaxHeap[index] = MaxHeap[getSizeOfMaxHeap() - 1];
+        size = getSizeOfMaxHeap() - 1;
+        reArrangeMaxHeapDownward(index);
+
+        return i;
+    }
+
+    public  int findMinimum() {
+        int minim = -1;
+        try {
+            minim = MaxHeap[0];
+        } catch (Exception e) {
+
+        }
+       return  minim;
     }
 }
